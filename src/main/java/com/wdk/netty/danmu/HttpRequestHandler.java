@@ -5,7 +5,9 @@ import io.netty.handler.codec.http.*;
 
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.nio.channels.SocketChannel;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * @Description
@@ -17,6 +19,17 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
     private String wsUri;
 
     private static File INDEX;
+
+    static {
+        URL location = HttpRequestHandler.class.getProtectionDomain().getCodeSource().getLocation();
+        try {
+            String path = location.toURI() + "WebSocketDanMu.html";
+            path = !path.contains("file:") ? path : path.substring(5);
+            INDEX = new File(path);
+        } catch (URISyntaxException e) {
+            throw new IllegalStateException("Unable to locate WebsocketChatClient.html", e);
+        }
+    }
 
     public HttpRequestHandler(String wsUri) {
         this.wsUri = wsUri;
@@ -45,6 +58,22 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<FullHttpRequ
                 cf.addListener(ChannelFutureListener.CLOSE);
             }
 
+            file.close();
         }
+    }
+
+    private static void send100Continue(ChannelHandlerContext ctx) {
+        FullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.CONTINUE);
+        ctx.writeAndFlush(response);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause)
+            throws Exception {
+        Channel incoming = ctx.channel();
+        System.out.println("Client:"+incoming.remoteAddress()+"异常");
+        // 当出现异常就关闭连接
+        cause.printStackTrace();
+        ctx.close();
     }
 }
