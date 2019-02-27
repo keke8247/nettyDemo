@@ -5,3 +5,5 @@ target/classes/*
 .settings/*
 target
 log.*
+.idea/*
+.idea
