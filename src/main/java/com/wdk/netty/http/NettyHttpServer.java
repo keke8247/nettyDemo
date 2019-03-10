@@ -55,9 +55,9 @@ public class NettyHttpServer {
         });
 
         try {
-            ChannelFuture cf = bootstrap.bind(port).sync(); //绑定端口号  设置同步
+            ChannelFuture cf = bootstrap.bind(port).sync(); //绑定端口号  设置同步  ChannelFuture channel异步计算的结果.
             System.out.println("服务已经成功启动port:"+port);
-            cf.channel().closeFuture().sync();
+            cf.channel().closeFuture().sync();  //底层在 DefaultPromise 里面调用了await()方法 然后调用了Object的 wait()方法,阻塞掉主线程,保证服务端Channel的正常运行
         } catch (InterruptedException e) {
             e.printStackTrace();
         }finally {
