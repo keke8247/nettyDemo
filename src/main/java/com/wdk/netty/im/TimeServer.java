@@ -31,8 +31,8 @@ public class TimeServer {
                     protected void initChannel(SocketChannel ch) throws Exception {
                         ChannelPipeline pipeline = ch.pipeline();
                         //通过 LineBasedFrameDecoder 和 StringDecoder处理拆包和粘包的问题
-                        pipeline.addLast("frameDecode",new LineBasedFrameDecoder(1024));
-                        pipeline.addLast("stringDecode",new StringDecoder());
+                        pipeline.addLast("frameDecode",new LineBasedFrameDecoder(1024));//根据回车换行符进行拆包.
+                        pipeline.addLast("stringDecode",new StringDecoder());//StringDecoder 将ByteBuf解码成字符串对象.
                         pipeline.addLast("timeHandler",new TimeServerHandler());
                     }
                 });
