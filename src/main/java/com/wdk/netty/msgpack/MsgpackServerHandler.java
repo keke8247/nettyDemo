@@ -13,7 +13,7 @@ public class MsgpackServerHandler extends SimpleChannelInboundHandler{
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("server receive the msgpack message is :"+msg);
+        System.out.println("server receive the msgpack message is :"+msg+" msg is "+msg.getClass());
         ctx.writeAndFlush(msg);
     }
 
