@@ -25,7 +25,6 @@ public class WebSocketDanmuServer {
     public void run() throws InterruptedException {
         EventLoopGroup baseGroup = new NioEventLoopGroup(2); //监听线程组
         EventLoopGroup workerGoup = new NioEventLoopGroup(3);//Io线程组
-
         try {
             ServerBootstrap serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(baseGroup,workerGoup)

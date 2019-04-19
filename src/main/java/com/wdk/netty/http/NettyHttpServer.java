@@ -36,20 +36,22 @@ public class NettyHttpServer {
             //每次有请求进来 都会执行该方法
             protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
 
+                ChannelPipeline pipeline = nioSocketChannel.pipeline();
+
                 //nioSocketChannel.pipeline().addLast() 添加的内容有严格的顺序限制
 
                 //HttpRequestDecoder用于 Http request报文解码
-                nioSocketChannel.pipeline().addLast("http-decoder",new HttpRequestDecoder());
+                pipeline.addLast("http-decoder",new HttpRequestDecoder());
 
                 //请求body体很小的时候 聚合 解析的时候 会解析成一个FullHttpRequest对象
                 //如果body体很大 不能使用聚合器
-                nioSocketChannel.pipeline().addLast("http",new HttpObjectAggregator(65536));
+                pipeline.addLast("http",new HttpObjectAggregator(65536));
 
                 //HttpResponseEncoder用于 Http response报文编码
-                nioSocketChannel.pipeline().addLast("http-response-encoder",new HttpResponseEncoder());
+                pipeline.addLast("http-response-encoder",new HttpResponseEncoder());
 
                 //设置业务处理Handler
-                nioSocketChannel.pipeline().addLast("http-servlet",new HttpServletHandler());
+                pipeline.addLast("http-servlet",new HttpServletHandler());
 
             }
         });
