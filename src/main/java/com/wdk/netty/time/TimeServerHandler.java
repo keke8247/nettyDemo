@@ -1,8 +1,7 @@
-package com.wdk.netty.im;
+package com.wdk.netty.time;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
@@ -56,6 +55,9 @@ public class TimeServerHandler extends ChannelInboundHandlerAdapter{
 
         ctx.write(resp);
         //加入 拆包 粘包Handler以后的处理方式 end
+
+
+        //channelRead()方法执行完成 会调用 channelReadComplete()方法.
     }
 
     @Override

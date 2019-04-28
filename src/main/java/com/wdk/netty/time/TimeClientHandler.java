@@ -1,11 +1,9 @@
-package com.wdk.netty.im;
+package com.wdk.netty.time;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-
-import java.util.Date;
 
 /**
  * @Description
