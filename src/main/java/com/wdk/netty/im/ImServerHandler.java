@@ -15,7 +15,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
  */
 public class ImServerHandler extends SimpleChannelInboundHandler<String>{
 
-    private ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
@@ -39,11 +39,8 @@ public class ImServerHandler extends SimpleChannelInboundHandler<String>{
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         //有人进入聊天室
         Channel inComming = ctx.channel();
-        for(Channel ch : channels){
-            if(inComming != ch){ //有人进来 向聊天室其他人发送一条信息
-                ch.writeAndFlush("热烈欢迎"+inComming.remoteAddress()+"进入聊天室...");
-            }
-        }
+        //有人进来 向聊天室其他人发送一条信息
+        channels.writeAndFlush("欢迎"+inComming.remoteAddress()+"加入聊天");
         //把当前接入的Channel放入聊天室
         channels.add(inComming);
 
@@ -54,11 +51,7 @@ public class ImServerHandler extends SimpleChannelInboundHandler<String>{
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         //有链接断开  离开聊天室
         Channel outChannel = ctx.channel();
-        for(Channel ch : channels){
-            if(outChannel != ch){ //有人离开聊天室 向聊天室其他人发送一条消息.
-                ch.writeAndFlush("再见:"+ch.remoteAddress()+"...欢迎再来.");
-            }
-        }
+        channels.writeAndFlush("再见:"+outChannel.remoteAddress()+"...欢迎再来");
         channels.remove(outChannel);
     }
 
