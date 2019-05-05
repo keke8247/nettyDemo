@@ -28,7 +28,6 @@ public class Test{
 
     //先执行一次do语句块  再判断while循环条件  条件满足继续执行do语句  不满足退出循环.
     public void testDoWhile(){
-
         int i=0;
         do{
             System.out.println("第"+i+"次执行...");
